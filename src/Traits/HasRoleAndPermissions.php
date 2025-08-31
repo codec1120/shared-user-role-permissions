@@ -46,7 +46,7 @@ trait HasRoleAndPermissions
     }
 
     // Combined user-role permissions
-    protected function getUserRolePermissions(): array
+    public function getUserRolePermissions(): array
     {
         return [
             UserRole::DOCTOR->value => [
