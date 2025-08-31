@@ -80,4 +80,11 @@ trait HasRoleAndPermissions
             ],
         ];
     }
+
+    
+    // Mutators
+    public function getPermissionsAttribute(): array
+    {
+        return $this->getUserRolePermissions()[$this->role];
+    }
 }
