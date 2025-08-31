@@ -21,7 +21,7 @@ trait HasRoleAndPermissions
     }
 
     // Action base permission verifier
-    public function can(string $permission): bool
+    public function hasPermission(string $permission): bool
     {
         $userRolePermissions = $this->getUserRolePermissions();
 
