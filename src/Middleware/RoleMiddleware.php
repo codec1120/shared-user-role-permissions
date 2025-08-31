@@ -11,7 +11,7 @@ class RoleMiddleware
     {
         $user = $request->user();
 
-        if (!$user || !$user->hasRole($role)) {
+        if (!$user || !$user->hasAnyRole($role)) {
             abort(403, 'Unauthorized');
         }
 
