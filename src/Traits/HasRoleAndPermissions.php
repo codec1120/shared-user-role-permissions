@@ -7,7 +7,9 @@ use App\Enums\{UserRole, Permissions};
 
 trait HasRoleAndPermissions
 {
-    // Check if user has a specific role
+     /**
+     * Optionally: check if user has a specific role
+     */
     public function hasRole(UserRole|string $role): bool
     {
         $roleValue = $role instanceof UserRole ? $role->value : $role;
@@ -15,17 +17,32 @@ trait HasRoleAndPermissions
         return $this->role === $roleValue;
     }
 
+     /**
+     * Optionally: check if user has any of role
+     */
     public function hasAnyRole(array $roles): bool
     {
         return in_array($this->role, $roles);
     }
 
-    // Action base permission verifier
-    public function hasPermission(string $permission): bool
+    /**
+     * Check if user has the given permission(s)
+     *
+     * @param string|array $permissions Single or multiple permission keys
+     * @param bool $requireAll True = all permissions required (AND), False = any permission (OR) user has ALL permission
+     * @return bool
+     */
+    public function hasPermission(string|array $permissions, bool $requireAll = false): bool
     {
         $userRolePermissions = $this->getUserRolePermissions();
+        $permissions = (array) $permissions;
+        $rolePermissions = $userRolePermissions[$this->role] ?? [];
 
-        return in_array($permission, $userRolePermissions[$this->role] ?? []);
+        if ($requireAll) {
+            return empty(array_diff($permissions, $rolePermissions));
+        } else {
+            return (bool) array_intersect($permissions, $rolePermissions) || in_array('all', $rolePermissions);
+        }
     }
 
     // Combined user-role permissions
